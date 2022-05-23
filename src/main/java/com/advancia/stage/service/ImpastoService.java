@@ -2,28 +2,20 @@ package com.advancia.stage.service;
 //Esempio di application bean che usa Hibernate
 
 import com.advancia.stage.dao.ImpastoDAO;
-import com.advancia.stage.dao.ProvaDAO;
 import com.advancia.stage.dto.ImpastoDTO;
 import com.advancia.stage.model.Impasto;
-import io.quarkus.hibernate.orm.PersistenceUnit;
 //import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
-import javax.enterprise.context.ApplicationScoped;
 //import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 
 
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.*;
 //import java.util.TimeZone;
-import com.advancia.stage.dao.ProvaDAO;
+
 
 @Path("/impasto")
 @Produces(MediaType.APPLICATION_JSON)
@@ -36,15 +28,9 @@ public class ImpastoService {
 
 
     //private List<Impasto> impasti = Collections.synchronizedList(new ArrayList<>())
-    private Set<Impasto> impasti = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>() ));
+    //private Set<Impasto> impasti = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>() ));
 
     //Il bean method è transactional e l'EM enlista e flusha al commit
-    @Transactional
-    public void creaImpasto(String nome){
-        Impasto impasto = new Impasto();
-        impasto.setNome(nome);
-        //em.persist(impasto);
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
