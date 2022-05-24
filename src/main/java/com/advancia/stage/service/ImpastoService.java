@@ -26,10 +26,6 @@ public class ImpastoService {
     @Inject
     ImpastoDAO impasto_dao;
 
-
-    //private List<Impasto> impasti = Collections.synchronizedList(new ArrayList<>())
-    //private Set<Impasto> impasti = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>() ));
-
     //Il bean method è transactional e l'EM enlista e flusha al commit
 
     @GET

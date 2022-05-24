@@ -23,7 +23,7 @@ public class UtenteService {
     @Inject
     UtenteDAO utente_dao;
 
-    private Set<Utente> impasti = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>() ));
+    //private Set<Utente> impasti = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>() ));
 
     @Transactional
     public void creaUtente(Utente utente){
@@ -42,8 +42,7 @@ public class UtenteService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public UtenteDTO getUtente(@PathParam("id") Long id){
-        UtenteDTO utenteFiltro = utente_dao.getUtente(id);
-        return utenteFiltro;
+        return utente_dao.getUtente(id);
     }
 
     @POST
