@@ -38,31 +38,44 @@ public class ImpastoDAO {
 
     public ImpastoDTO getImpasto(Long id){
         Query query = em.createQuery("from Impasto i where i.id = "+id);
-        List<Impasto> x = (ArrayList<Impasto>) query.getResultList();
-        System.out.println(x);
-        return SingleModel.convertToImpastoDTO(x.get(0));
-        //return x.get(0);
+        Impasto x = (Impasto) query.getSingleResult();
+        if(x!=null){
+            return SingleModel.convertToImpastoDTO(x);
+        }
+        return null;
     }
     public void add(Impasto impasto){
-        em.persist(impasto);
-        System.out.println("Fine dell'inserimento di un nuovo impasto");
-        em.flush();
-        em.clear();
+        if(impasto != null) {
+            em.persist(impasto);
+            System.out.println("Fine dell'inserimento di un nuovo impasto");
+            em.flush();
+            em.clear();
+        }
     }
 
     public void delete(Long id){
-        Impasto impasto = em.find(Impasto.class, id);
-        em.remove(impasto);
-        em.flush();
-        em.clear();
+        if(id != null && id != 0) {
+            Impasto impasto = em.find(Impasto.class, id);
+            if(impasto != null) {
+                em.remove(impasto);
+                em.flush();
+                em.clear();
+            }
+        }
     }
 
     public void update(Long id, Impasto impasto){
-        Impasto impastoVecchio = em.find(Impasto.class, id);
-        if(impasto.getNome() != null){
-            impastoVecchio.setNome(impasto.getNome());
+        if(id != null && id != 0) {
+            if(impasto != null) {
+                Impasto impastoVecchio = em.find(Impasto.class, id);
+                if(impastoVecchio != null) {
+                    if (impasto.getNome() != null) {
+                        impastoVecchio.setNome(impasto.getNome());
+                    }
+                    em.merge(impastoVecchio);
+                }
+            }
         }
-        em.merge(impastoVecchio);
     }
 
 

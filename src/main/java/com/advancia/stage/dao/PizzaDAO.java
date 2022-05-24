@@ -24,15 +24,22 @@ public class PizzaDAO implements PanacheRepository<Pizza> {
 
         Query query = em.createQuery("from Pizza");
         List<Pizza> res = (ArrayList<Pizza>) query.getResultList();
-        list = ListModel.transformToPizzaDTO(res);
-        return list;
+        if(res != null) {
+            list = ListModel.transformToPizzaDTO(res);
+            return list;
+        }else{
+            return null;
+        }
     }
 
     public PizzaDTO getPizza(Long id){
         Query query = em.createQuery("from Pizza p where p.id = "+id);
-        List<Pizza> x = query.getResultList();
-        PizzaDTO pizzaFiltro = SingleModel.convertToPizzaDTO(x.get(0));
-        return pizzaFiltro;
+        Pizza x = (Pizza) query.getSingleResult();
+        if(x != null) {
+            return SingleModel.convertToPizzaDTO(x);
+        }else{
+            return null;
+        }
     }
 
 
@@ -59,19 +66,24 @@ public class PizzaDAO implements PanacheRepository<Pizza> {
     public void delete(Long id){
         if(id != null && id != 0) {
             Pizza pizza = em.find(Pizza.class, id);
-            em.remove(pizza);
-            em.flush();
-            em.clear();
+            if(pizza != null){
+                em.remove(pizza);
+                em.flush();
+                em.clear();
+            }
+
         }
     }
 
     public void update(Long id, Pizza pizza){
         if(id != 0 && id != null && pizza != null) {
             Pizza pizzaVecchia = em.find(Pizza.class, id);
-            if (pizza.getNome() != null) {
-                pizzaVecchia.setNome(pizza.getNome());
+            if(pizzaVecchia != null) {
+                if (pizza.getNome() != null) {
+                    pizzaVecchia.setNome(pizza.getNome());
+                }
+                em.merge(pizzaVecchia);
             }
-            em.merge(pizzaVecchia);
         }
 
     }

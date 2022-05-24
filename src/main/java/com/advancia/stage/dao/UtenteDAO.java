@@ -22,41 +22,53 @@ public class UtenteDAO {
     public List<UtenteDTO> ute_list(){
         Query query = em.createQuery("from Utente");
         List<Utente> utenti = (ArrayList<Utente>) query.getResultList();
-        List<UtenteDTO> listaCambiata = ListModel.transformToUtenteDTO(utenti);
-
-        return listaCambiata;
+        if(utenti!=null) {
+            return ListModel.transformToUtenteDTO(utenti);
+        }
+        return null;
     }
 
     public UtenteDTO getUtente(Long id){
         Query query = em.createQuery("from Utente u where u.id = "+id);
-        List<Utente> utenti = query.getResultList();
-        UtenteDTO utenteFiltro = SingleModel.convertToUtenteDTO(utenti.get(0));
-        return utenteFiltro;
+        Utente utenti = (Utente) query.getSingleResult();
+        if(utenti!=null) {
+            return SingleModel.convertToUtenteDTO(utenti);
+        }
+        return null;
     }
 
     public void add(Utente utente){
-        em.persist(utente);
-        System.out.println("fine inserimento utente");
-        em.flush();
-        em.clear();
+        if(utente != null) {
+            em.persist(utente);
+            System.out.println("fine inserimento utente");
+            em.flush();
+            em.clear();
+        }
     }
 
     public void delete(Long id){
-        Utente utente = em.find(Utente.class, id);
-        em.remove(utente);
-        em.flush();
-        em.clear();
+        if(id != null) {
+            Utente utente = em.find(Utente.class, id);
+            em.remove(utente);
+            em.flush();
+            em.clear();
+        }
     }
 
     public void update(Long id, Utente utente){
-        // Prendo l'oggetto, ne cambio i valori SE non sono null, lo persisto.
-        Utente utenteVecchio = em.find(Utente.class, id);
-        if(utente.getUsername() != null){
-            utenteVecchio.setUsername(utente.getUsername());
+        if(id != null && id != 0) {
+            if(utente != null) {
+                Utente utenteVecchio = em.find(Utente.class, id);
+                if(utenteVecchio != null) {
+                    if (utente.getUsername() != null) {
+                        utenteVecchio.setUsername(utente.getUsername());
+                    }
+                    if (utente.getPassword() != null) {
+                        utenteVecchio.setPassword(utente.getPassword());
+                    }
+                    em.merge(utenteVecchio);
+                }
+            }
         }
-        if(utente.getPassword() != null){
-            utenteVecchio.setPassword(utente.getPassword());
-        }
-        em.merge(utenteVecchio);
     }
 }
