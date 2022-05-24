@@ -11,19 +11,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("/pizza")
+@Path("pizza")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PizzaService {
 
     @Inject
     PizzaDAO pizza_dao;
-
-    @Transactional
-    public void creaPizza(Pizza pizza){
-        System.out.println("crea pizza");
-        //em.persist(pizza);
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -39,6 +33,12 @@ public class PizzaService {
         return x;
     }
 
+    @Path("n/{nome}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public PizzaDTO getPizzaByNome(@PathParam("nome") String nome){
+        return pizza_dao.findByNome(nome);
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

@@ -4,6 +4,7 @@ import com.advancia.stage.dto.PizzaDTO;
 import com.advancia.stage.model.Pizza;
 import com.advancia.stage.util.ListModel;
 import com.advancia.stage.util.SingleModel;
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
-public class PizzaDAO {
+public class PizzaDAO implements PanacheRepository<Pizza> {
 
     @Inject
     EntityManager em;
@@ -34,28 +35,45 @@ public class PizzaDAO {
         return pizzaFiltro;
     }
 
+
+    public PizzaDTO findByNome(String nome) {
+
+        Pizza result = find("nome", nome).firstResult();
+        if (result != null){
+            return SingleModel.convertToPizzaDTO(result);
+        }else{
+            return null;
+        }
+    }
+
     public void add(Pizza pizza){
-        //deve avere tutti i campi tranne id;
-        em.persist(pizza);
-        System.out.println("Fine inserimento di una nuova pizza");
-        em.flush();
-        em.clear();
+        if(pizza!=null) {
+            em.persist(pizza);
+            System.out.println("Fine inserimento di una nuova pizza");
+            em.flush();
+            em.clear();
+        }
+
     }
 
     public void delete(Long id){
-        Pizza pizza = em.find(Pizza.class, id);
-        em.remove(pizza);
-        em.flush();
-        em.clear();
+        if(id != null && id != 0) {
+            Pizza pizza = em.find(Pizza.class, id);
+            em.remove(pizza);
+            em.flush();
+            em.clear();
+        }
     }
 
     public void update(Long id, Pizza pizza){
-        Pizza pizzaVecchia = em.find(Pizza.class, id);
-        if(pizza.getNome() != null){
-            pizzaVecchia.setNome(pizza.getNome());
+        if(id != 0 && id != null && pizza != null) {
+            Pizza pizzaVecchia = em.find(Pizza.class, id);
+            if (pizza.getNome() != null) {
+                pizzaVecchia.setNome(pizza.getNome());
+            }
+            em.merge(pizzaVecchia);
         }
 
-        em.merge(pizzaVecchia);
     }
 
 }

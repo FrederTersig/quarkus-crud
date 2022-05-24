@@ -22,10 +22,6 @@ public class IngredienteService {
 
     private Set<Ingrediente> ingredienti = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>() ));
 
-    @Transactional
-    public void creaIngrediente(Ingrediente ingrediente){
-        System.out.println("crea ingrediente");
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

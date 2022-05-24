@@ -25,12 +25,6 @@ public class UtenteService {
 
     //private Set<Utente> impasti = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>() ));
 
-    @Transactional
-    public void creaUtente(Utente utente){
-        System.out.println("Aggiungo utente");
-        //em.persist(utente);
-    }
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
