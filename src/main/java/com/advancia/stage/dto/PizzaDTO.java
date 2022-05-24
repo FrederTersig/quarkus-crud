@@ -31,6 +31,14 @@ public class PizzaDTO {
         this.ingredienti = ingredienti;
     }
 
+    public PizzaDTO(UtenteDTO utente, Long id, String nome, List<IngredienteDTO> ingredienti, ImpastoDTO impasto){
+        this.utente = utente;
+        this.id = id;
+        this.nome = nome;
+        this.ingredienti = ingredienti;
+        this.impasto = impasto;
+    }
+
     public PizzaDTO(Long id) {
         this.id = id;
     }

@@ -10,6 +10,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,21 +25,22 @@ public class ImpastoDAO {
     EntityManager em;
 
     public List<ImpastoDTO> imp_list(){
-        List<ImpastoDTO> list = new ArrayList<ImpastoDTO>();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Impasto> cr = cb.createQuery(Impasto.class);
+        Root<Impasto> root = cr.from(Impasto.class);
+        cr.select(root);
 
-        Query query = em.createQuery("from Impasto");
+        Query query = em.createQuery(cr);
         List<Impasto> res = (ArrayList<Impasto>) query.getResultList();
-        list = ListModel.transformToImpastoDTO(res);
-        return list;
+        return ListModel.transformToImpastoDTO(res);
     }
 
 
     public ImpastoDTO getImpasto(Long id){
         Query query = em.createQuery("from Impasto i where i.id = "+id);
-        List<Impasto> x = query.getResultList();
+        List<Impasto> x = (ArrayList<Impasto>) query.getResultList();
         System.out.println(x);
-        ImpastoDTO impastoFiltro = SingleModel.convertToImpastoDTO(x.get(0));
-        return impastoFiltro;
+        return SingleModel.convertToImpastoDTO(x.get(0));
         //return x.get(0);
     }
     public void add(Impasto impasto){
@@ -59,21 +64,6 @@ public class ImpastoDAO {
         }
         em.merge(impastoVecchio);
     }
-
-
-/*
-    public List<ImpastoDTO> impastiList(){
-        List<ImpastoDTO> list = new ArrayList<ImpastoDTO>();
-
-        Query query = em.createQuery("from Impasto");
-        List<Impasto> res = (ArrayList<Impasto>) query.getResultList();
-        list = ListModel.transformToImpastoDTO(res);
-        return list;
-    }
-*/
-
-
-
 
 
 }

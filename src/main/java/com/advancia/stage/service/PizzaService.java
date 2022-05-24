@@ -44,6 +44,7 @@ public class PizzaService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Pizza addPizza(Pizza pizza){
+        System.out.println(pizza);
         pizza_dao.add(pizza);
         return pizza;
     }

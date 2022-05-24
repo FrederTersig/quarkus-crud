@@ -35,6 +35,7 @@ public class PizzaDAO {
     }
 
     public void add(Pizza pizza){
+        //deve avere tutti i campi tranne id;
         em.persist(pizza);
         System.out.println("Fine inserimento di una nuova pizza");
         em.flush();
